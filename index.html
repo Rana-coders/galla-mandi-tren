@@ -7,6 +7,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
+   // Change this line at the top of your script
+const API_BASE = window.location.origin === 'null' ? 'http://localhost:5000' : window.location.origin;
 :root{--bg-primary:#0a0e17;--bg-card:#1a1f2e;--neon-green:#00ff88;--neon-red:#ff3366;--neon-blue:#00d4ff;--neon-gold:#ffd700;--neon-purple:#b347d9;--text-primary:#e2e8f0;--text-secondary:#94a3b8;--text-muted:#64748b;--border-color:rgba(255,255,255,0.08);--shadow-3d:8px 8px 16px rgba(0,0,0,0.6),-4px -4px 12px rgba(255,255,255,0.03)}
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:'Rajdhani',sans-serif;background:var(--bg-primary);color:var(--text-primary);min-height:100vh;overflow-x:hidden}
