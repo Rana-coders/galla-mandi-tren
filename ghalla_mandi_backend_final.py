@@ -77,6 +77,11 @@ class PriceStore:
             self.save()
 
 store = PriceStore()
+# ... (rest of your python code)
+@app.route('/dashboard')
+def dashboard():
+    return send_from_directory('.', 'index.html') # Changed from ghalla_mandi_frontend_final.html
+# ...
 
 # ==================== SCRAPERS ====================
 
