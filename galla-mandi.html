@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ghalla Mandi - Real-Time Agricultural Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+:root{--bg-primary:#0a0e17;--bg-card:#1a1f2e;--neon-green:#00ff88;--neon-red:#ff3366;--neon-blue:#00d4ff;--neon-gold:#ffd700;--neon-purple:#b347d9;--text-primary:#e2e8f0;--text-secondary:#94a3b8;--text-muted:#64748b;--border-color:rgba(255,255,255,0.08);--shadow-3d:8px 8px 16px rgba(0,0,0,0.6),-4px -4px 12px rgba(255,255,255,0.03)}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Rajdhani',sans-serif;background:var(--bg-primary);color:var(--text-primary);min-height:100vh;overflow-x:hidden}
+.bg-grid{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;opacity:0.4;background-image:linear-gradient(rgba(0,212,255,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(0,212,255,0.03) 1px,transparent 1px);background-size:50px 50px;animation:gridMove 20s linear infinite}
+@keyframes gridMove{0%{transform:translate(0,0)}100%{transform:translate(50px,50px)}}
+.header{position:relative;z-index:100;padding:20px 30px;background:linear-gradient(180deg,rgba(10,14,23,0.95) 0%,rgba(10,14,23,0.8) 100%);backdrop-filter:blur(20px);border-bottom:1px solid var(--border-color);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:15px}
+.brand{display:flex;align-items:center;gap:15px}
+.brand-icon{width:50px;height:50px;background:linear-gradient(135deg,var(--neon-green),var(--neon-blue));border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:24px;color:var(--bg-primary);box-shadow:0 0 20px rgba(0,255,136,0.3);animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{box-shadow:0 0 20px rgba(0,255,136,0.3)}50%{box-shadow:0 0 40px rgba(0,255,136,0.6)}}
+.brand-text h1{font-family:'Orbitron',sans-serif;font-size:1.8rem;font-weight:900;letter-spacing:2px;background:linear-gradient(135deg,var(--neon-green),var(--neon-blue));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.brand-text p{font-size:0.85rem;color:var(--text-secondary);letter-spacing:3px;text-transform:uppercase}
+.developer-credit{text-align:right}
+.developer-credit .label{font-size:0.7rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:2px;margin-bottom:4px}
+.developer-credit .name{font-family:'Orbitron',sans-serif;font-size:1rem;font-weight:700;color:var(--neon-gold);text-shadow:0 0 5px rgba(255,215,0,0.5),0 0 10px rgba(255,215,0,0.3),0 0 20px rgba(255,215,0,0.2);animation:neonFlicker 3s ease-in-out infinite alternate}
+@keyframes neonFlicker{0%,100%{text-shadow:0 0 5px rgba(255,215,0,0.5),0 0 10px rgba(255,215,0,0.3),0 0 20px rgba(255,215,0,0.2)}50%{text-shadow:0 0 10px rgba(255,215,0,0.8),0 0 20px rgba(255,215,0,0.5),0 0 40px rgba(255,215,0,0.3)}}
+.live-indicator{display:flex;align-items:center;gap:8px;background:var(--bg-card);padding:8px 16px;border-radius:30px;border:1px solid var(--border-color)}
+.live-dot{width:10px;height:10px;background:var(--neon-green);border-radius:50%;animation:liveBlink 1.5s ease-in-out infinite;box-shadow:0 0 10px var(--neon-green)}
+@keyframes liveBlink{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.3;transform:scale(0.8)}}
+.live-text{font-size:0.8rem;font-weight:600;color:var(--neon-green);letter-spacing:1px}
+.last-update{font-size:0.75rem;color:var(--text-muted);margin-top:2px}
+.main-container{position:relative;z-index:10;padding:30px;max-width:1400px;margin:0 auto}
+.section-header{display:flex;align-items:center;gap:12px;margin-bottom:25px;margin-top:20px}
+.section-header:first-child{margin-top:0}
+.section-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px}
+.section-icon.local{background:linear-gradient(135deg,rgba(0,255,136,0.15),rgba(0,212,255,0.15));color:var(--neon-green);border:1px solid rgba(0,255,136,0.2)}
+.section-icon.intl{background:linear-gradient(135deg,rgba(255,215,0,0.15),rgba(179,71,217,0.15));color:var(--neon-gold);border:1px solid rgba(255,215,0,0.2)}
+.section-title{font-family:'Orbitron',sans-serif;font-size:1.2rem;font-weight:700;letter-spacing:1px}
+.section-title.local{color:var(--neon-green)}
+.section-title.intl{color:var(--neon-gold)}
+.section-subtitle{font-size:0.8rem;color:var(--text-muted);margin-top:2px}
+.commodity-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:25px;margin-bottom:40px}
+.commodity-card{background:var(--bg-card);border-radius:20px;padding:25px;border:1px solid var(--border-color);box-shadow:var(--shadow-3d);transition:all 0.4s cubic-bezier(0.175,0.885,0.32,1.275);position:relative;overflow:hidden;cursor:pointer}
+.commodity-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--neon-green),var(--neon-blue));opacity:0;transition:opacity 0.3s ease}
+.commodity-card:hover{transform:translateY(-8px) rotateX(5deg) rotateY(-2deg);box-shadow:15px 15px 30px rgba(0,0,0,0.7),-5px -5px 15px rgba(255,255,255,0.05),0 0 30px rgba(0,255,136,0.1)}
+.commodity-card:hover::before{opacity:1}
+.commodity-card.updating{animation:cardUpdate 0.5s ease}
+@keyframes cardUpdate{0%{transform:scale(1)}50%{transform:scale(1.02);box-shadow:0 0 30px rgba(0,255,136,0.2)}100%{transform:scale(1)}}
+.card-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px}
+.commodity-info{display:flex;align-items:center;gap:12px}
+.commodity-icon{width:48px;height:48px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:22px;background:linear-gradient(135deg,rgba(0,255,136,0.1),rgba(0,212,255,0.1));border:1px solid rgba(0,255,136,0.15);transition:all 0.3s ease}
+.commodity-card:hover .commodity-icon{transform:scale(1.1) rotate(5deg);box-shadow:0 0 20px rgba(0,255,136,0.2)}
+.commodity-name{font-family:'Orbitron',sans-serif;font-size:1.1rem;font-weight:700;color:var(--text-primary);letter-spacing:0.5px}
+.commodity-local{font-size:0.75rem;color:var(--text-muted);margin-top:2px}
+.trend-badge{display:flex;align-items:center;gap:5px;padding:6px 12px;border-radius:20px;font-size:0.8rem;font-weight:700}
+.trend-badge.up{background:rgba(0,255,136,0.1);color:var(--neon-green);border:1px solid rgba(0,255,136,0.2)}
+.trend-badge.down{background:rgba(255,51,102,0.1);color:var(--neon-red);border:1px solid rgba(255,51,102,0.2)}
+.price-display{margin-bottom:20px}
+.price-main{font-family:'Orbitron',sans-serif;font-size:2.2rem;font-weight:900;letter-spacing:1px;display:flex;align-items:baseline;gap:8px}
+.currency{font-size:1rem;color:var(--text-secondary);font-weight:500}
+.price-value{background:linear-gradient(135deg,var(--text-primary),var(--neon-blue));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.price-unit{font-size:0.75rem;color:var(--text-muted);font-weight:400;margin-left:4px}
+.price-change{display:flex;align-items:center;gap:8px;margin-top:8px;font-size:0.9rem}
+.change-arrow{font-size:1rem}
+.change-arrow.up{color:var(--neon-green)}
+.change-arrow.down{color:var(--neon-red)}
+.change-value{font-weight:700}
+.change-value.up{color:var(--neon-green)}
+.change-value.down{color:var(--neon-red)}
+.change-abs{color:var(--text-muted);font-size:0.8rem}
+.stats-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding-top:15px;border-top:1px solid var(--border-color)}
+.stat-item{display:flex;flex-direction:column;gap:4px}
+.stat-label{font-size:0.7rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px}
+.stat-value{font-family:'Orbitron',sans-serif;font-size:0.9rem;font-weight:600;color:var(--text-secondary)}
+.sparkline-container{height:40px;margin-top:15px;position:relative}
+.sparkline{width:100%;height:100%}
+.commodity-card.intl-card .commodity-icon{background:linear-gradient(135deg,rgba(255,215,0,0.1),rgba(179,71,217,0.1));border:1px solid rgba(255,215,0,0.15)}
+.commodity-card.intl-card:hover .commodity-icon{box-shadow:0 0 20px rgba(255,215,0,0.2)}
+.commodity-card.intl-card::before{background:linear-gradient(90deg,var(--neon-gold),var(--neon-purple))}
+.commodity-card.intl-card:hover{box-shadow:15px 15px 30px rgba(0,0,0,0.7),-5px -5px 15px rgba(255,255,255,0.05),0 0 30px rgba(255,215,0,0.1)}
+.intl-card .price-value{background:linear-gradient(135deg,var(--neon-gold),var(--neon-purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.market-summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px;margin-bottom:30px}
+.summary-card{background:var(--bg-card);border-radius:16px;padding:20px;border:1px solid var(--border-color);box-shadow:var(--shadow-3d);display:flex;align-items:center;gap:15px;transition:transform 0.3s ease}
+.summary-card:hover{transform:translateY(-3px)}
+.summary-icon{width:45px;height:45px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px}
+.summary-icon.green{background:rgba(0,255,136,0.1);color:var(--neon-green)}
+.summary-icon.red{background:rgba(255,51,102,0.1);color:var(--neon-red)}
+.summary-icon.blue{background:rgba(0,212,255,0.1);color:var(--neon-blue)}
+.summary-icon.gold{background:rgba(255,215,0,0.1);color:var(--neon-gold)}
+.summary-content h4{font-size:0.75rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px}
+.summary-content .value{font-family:'Orbitron',sans-serif;font-size:1.3rem;font-weight:700;color:var(--text-primary)}
+.data-source-badge{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:12px;font-size:0.7rem;margin-top:10px;font-weight:600;letter-spacing:0.5px}
+.data-source-badge.real{background:rgba(0,255,136,0.1);color:var(--neon-green);border:1px solid rgba(0,255,136,0.2)}
+.data-source-badge.scraped{background:rgba(0,212,255,0.1);color:var(--neon-blue);border:1px solid rgba(0,212,255,0.2)}
+.data-source-badge.sim{background:rgba(255,215,0,0.1);color:var(--neon-gold);border:1px solid rgba(255,215,0,0.2)}
+.daily-update-banner{background:linear-gradient(135deg,rgba(0,255,136,0.1),rgba(0,212,255,0.1));border:1px solid rgba(0,255,136,0.2);border-radius:16px;padding:20px 25px;margin-bottom:25px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:15px}
+.daily-update-info{display:flex;align-items:center;gap:15px}
+.daily-update-icon{width:50px;height:50px;background:linear-gradient(135deg,var(--neon-green),var(--neon-blue));border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:22px;color:var(--bg-primary)}
+.daily-update-text h3{font-family:'Orbitron',sans-serif;font-size:1rem;color:var(--neon-green);margin-bottom:4px}
+.daily-update-text p{font-size:0.8rem;color:var(--text-secondary)}
+.daily-update-time{font-family:'Orbitron',sans-serif;font-size:0.9rem;color:var(--neon-blue)}
+.footer{text-align:center;padding:30px;border-top:1px solid var(--border-color);margin-top:20px;color:var(--text-muted);font-size:0.8rem}
+.footer .heart{color:var(--neon-red);animation:heartbeat 1.5s ease-in-out infinite}
+@keyframes heartbeat{0%,100%{transform:scale(1)}50%{transform:scale(1.2)}}
+.loading-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:var(--bg-primary);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:10000;transition:opacity 0.5s ease,visibility 0.5s ease}
+.loading-overlay.hidden{opacity:0;visibility:hidden}
+.loader{width:60px;height:60px;border:3px solid rgba(0,255,136,0.1);border-top-color:var(--neon-green);border-radius:50%;animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-text{margin-top:20px;font-family:'Orbitron',sans-serif;font-size:1rem;color:var(--neon-green);letter-spacing:2px}
+.error-banner{background:rgba(255,51,102,0.1);border:1px solid rgba(255,51,102,0.2);color:var(--neon-red);padding:12px 20px;border-radius:12px;margin-bottom:20px;font-size:0.85rem;display:none}
+.error-banner.show{display:block}
+@media(max-width:768px){.header{padding:15px 20px;flex-direction:column;text-align:center}.brand-text h1{font-size:1.4rem}.developer-credit{text-align:center}.main-container{padding:20px 15px}.commodity-grid{grid-template-columns:1fr;gap:15px}.price-main{font-size:1.8rem}.market-summary{grid-template-columns:1fr}.daily-update-banner{flex-direction:column;text-align:center}}
+@media(max-width:480px){.brand-text h1{font-size:1.1rem}.commodity-card{padding:18px}.price-main{font-size:1.5rem}}
+::-webkit-scrollbar{width:8px}
+::-webkit-scrollbar-track{background:var(--bg-primary)}
+::-webkit-scrollbar-thumb{background:linear-gradient(180deg,var(--neon-green),var(--neon-blue));border-radius:4px}
+::-webkit-scrollbar-thumb:hover{background:linear-gradient(180deg,var(--neon-blue),var(--neon-green))}
+</style>
+</head>
+<body>
+<div class="bg-grid"></div>
+<div class="loading-overlay" id="loadingOverlay"><div class="loader"></div><div class="loading-text">Loading Real Market Data...</div></div>
+<header class="header">
+<div class="brand"><div class="brand-icon"><i class="fas fa-seedling"></i></div><div class="brand-text"><h1>GHALLA MANDI</h1><p>Real-Time Agricultural Dashboard</p></div></div>
+<div class="live-indicator"><div class="live-dot"></div><div><div class="live-text">LIVE MARKET</div><div class="last-update" id="lastUpdate">Loading...</div></div></div>
+<div class="developer-credit"><div class="label">Developed by</div><div class="name">Muhammad Umer Farooq</div></div>
+</header>
+<main class="main-container">
+<div class="error-banner" id="errorBanner"><i class="fas fa-exclamation-triangle"></i> <span id="errorText">Start backend: python ghalla_mandi_backend_final.py</span></div>
+<div class="daily-update-banner"><div class="daily-update-info"><div class="daily-update-icon"><i class="fas fa-calendar-check"></i></div><div class="daily-update-text"><h3>Daily Real Price Update</h3><p>Base prices scraped from Pakistan commodity websites every midnight</p></div></div><div class="daily-update-time" id="dailyUpdateTime">Last: --</div></div>
+<div class="market-summary">
+<div class="summary-card"><div class="summary-icon green"><i class="fas fa-arrow-trend-up"></i></div><div class="summary-content"><h4>Markets Up</h4><div class="value" id="marketsUp">--</div></div></div>
+<div class="summary-card"><div class="summary-icon red"><i class="fas fa-arrow-trend-down"></i></div><div class="summary-content"><h4>Markets Down</h4><div class="value" id="marketsDown">--</div></div></div>
+<div class="summary-card"><div class="summary-icon blue"><i class="fas fa-globe"></i></div><div class="summary-content"><h4>USD/PKR</h4><div class="value" id="usdPkrRate">--</div></div></div>
+<div class="summary-card"><div class="summary-icon gold"><i class="fas fa-database"></i></div><div class="summary-content"><h4>Sources</h4><div class="value" id="scrapedCount">--</div></div></div>
+</div>
+<div class="section-header"><div class="section-icon local"><i class="fas fa-warehouse"></i></div><div><h2 class="section-title local">Pakistan Local Market</h2><p class="section-subtitle">Daily scraped base + live micro-fluctuation every 10s</p></div></div>
+<div class="commodity-grid" id="localGrid"></div>
+<div class="section-header"><div class="section-icon intl"><i class="fas fa-globe-americas"></i></div><div><h2 class="section-title intl">International Futures</h2><p class="section-subtitle">TradingEconomics daily base + live micro-fluctuation every 60s</p></div></div>
+<div class="commodity-grid" id="intlGrid"></div>
+</main>
+<footer class="footer"><p><i class="fas fa-code"></i> Crafted with <i class="fas fa-heart" style="color:var(--neon-red)"></i> by Muhammad Umer Farooq | <span id="dataStatus"></span> | <i class="fas fa-clock"></i> <span id="footerTime"></span></p></footer>
+<script>
+const API_BASE='http://localhost:5000';
+const localCommodities=[{id:'gandam',name:'Gandam',localName:'Wheat',icon:'fa-wheat-awn',unit:'per 40kg',color:'#00ff88'},{id:'bajra',name:'Bajra',localName:'Pearl Millet',icon:'fa-bowl-rice',unit:'per 40kg',color:'#00d4ff'},{id:'sarso',name:'Sarso',localName:'Mustard Seed',icon:'fa-droplet',unit:'per 40kg',color:'#ffd700'},{id:'kapas',name:'Kapas',localName:'Cotton',icon:'fa-cloud',unit:'per 40kg',color:'#b347d9'},{id:'tili',name:'Tili',localName:'Sesame Seed',icon:'fa-circle-dot',unit:'per 40kg',color:'#ff6b35'},{id:'jo',name:'Jo',localName:'Barley',icon:'fa-wheat-awn-circle-exclamation',unit:'per 40kg',color:'#a8e6cf'}];
+const intlCommodities=[{id:'wheat_futures',name:'Wheat Futures',symbol:'ZW',exchange:'CBOT',icon:'fa-wheat-awn',unit:'per Ton',color:'#ffd700'},{id:'cotton_futures',name:'Cotton Futures',symbol:'CT',exchange:'CME',icon:'fa-cloud',unit:'per Ton',color:'#b347d9'}];
+let backendConnected=false;
+async function fetchAPI(endpoint){try{const r=await fetch(API_BASE+endpoint,{headers:{'Accept':'application/json'}});if(!r.ok)throw new Error('HTTP '+r.status);return await r.json()}catch(e){return null}}
+async function checkBackend(){const h=await fetchAPI('/api/health');backendConnected=!!h;if(!h){document.getElementById('errorBanner').classList.add('show')}else{document.getElementById('errorBanner').classList.remove('show')}return h}
+function sparkline(hist,color){const mn=Math.min(...hist),mx=Math.max(...hist),rg=mx-mn||1;const pts=hist.map((v,i)=>{const x=(i/(hist.length-1))*250,y=40-((v-mn)/rg)*36-2;return x+','+y}).join(' ');const up=hist[hist.length-1]>=hist[0];const sc=up?'#00ff88':'#ff3366';return '<svg class="sparkline" viewBox="0 0 250 40" preserveAspectRatio="none"><defs><linearGradient id="sg'+color.replace('#','')+'" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:'+sc+';stop-opacity:0.3"/><stop offset="100%" style="stop-color:'+sc+';stop-opacity:0"/></linearGradient></defs><polyline fill="none" stroke="'+sc+'" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" points="'+pts+'"/><polygon points="0,40 '+pts+' 250,40" fill="url(#sg'+color.replace('#','')+')"/></svg>'}
+function badge(item){if(!backendConnected)return'<div class="data-source-badge sim"><i class="fas fa-database"></i> Real Base (Fallback)</div>';return'<div class="data-source-badge scraped"><i class="fas fa-spider"></i> Daily Scraped + Live</div>'}
+function renderLocal(item,d){const up=d.change>=0,ar=up?'fa-arrow-up':'fa-arrow-down',tc=up?'up':'down',cs=up?'+':'';return'<div class="commodity-card" id="card-'+item.id+'"><div class="card-header"><div class="commodity-info"><div class="commodity-icon"><i class="fas '+item.icon+'"></i></div><div><div class="commodity-name">'+item.name+'</div><div class="commodity-local">'+item.localName+'</div></div></div><div class="trend-badge '+tc+'"><i class="fas '+ar+'"></i> '+Math.abs(d.change_percent).toFixed(2)+'%</div></div><div class="price-display"><div class="price-main"><span class="currency">PKR</span><span class="price-value">'+Math.round(d.current).toLocaleString('en-PK')+'</span><span class="price-unit">'+item.unit+'</span></div><div class="price-change"><span class="change-arrow '+tc+'"><i class="fas '+ar+'"></i></span><span class="change-value '+tc+'">'+cs+Math.round(d.change)+'</span><span class="change-abs">PKR</span></div></div><div class="sparkline-container">'+sparkline(d.history,item.color)+'</div><div class="stats-row"><div class="stat-item"><span class="stat-label">High</span><span class="stat-value">PKR '+Math.round(d.high).toLocaleString('en-PK')+'</span></div><div class="stat-item"><span class="stat-label">Low</span><span class="stat-value">PKR '+Math.round(d.low).toLocaleString('en-PK')+'</span></div></div>'+badge(item)+'</div>'}
+function renderIntl(item,d,rate){const up=d.change>=0,ar=up?'fa-arrow-up':'fa-arrow-down',tc=up?'up':'down',cs=up?'+':'';const pkr=(d.current*rate).toFixed(0);return'<div class="commodity-card intl-card" id="card-'+item.id+'"><div class="card-header"><div class="commodity-info"><div class="commodity-icon"><i class="fas '+item.icon+'"></i></div><div><div class="commodity-name">'+item.name+'</div><div class="commodity-local">'+item.exchange+' &bull; '+item.symbol+'</div></div></div><div class="trend-badge '+tc+'"><i class="fas '+ar+'"></i> '+Math.abs(d.change_percent).toFixed(2)+'%</div></div><div class="price-display"><div class="price-main"><span class="currency">$</span><span class="price-value">'+d.current.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})+'</span><span class="price-unit">'+item.unit+'</span></div><div class="price-change"><span class="change-arrow '+tc+'"><i class="fas '+ar+'"></i></span><span class="change-value '+tc+'">'+cs+d.change.toFixed(2)+'</span><span class="change-abs">USD</span></div><div style="margin-top:6px;font-size:0.8rem;color:var(--text-muted)">&approx; PKR '+parseInt(pkr).toLocaleString('en-PK')+' / ton</div></div><div class="sparkline-container">'+sparkline(d.history,item.color)+'</div><div class="stats-row"><div class="stat-item"><span class="stat-label">High</span><span class="stat-value">$ '+d.high.toFixed(2)+'</span></div><div class="stat-item"><span class="stat-label">Low</span><span class="stat-value">$ '+d.low.toFixed(2)+'</span></div></div><div class="data-source-badge real"><i class="fas fa-globe"></i> TradingEconomics Daily Base</div></div>'}
+async function updateUI(){const data=await fetchAPI('/api/prices');if(!data)return;document.getElementById('usdPkrRate').textContent=data.usd_pkr.toFixed(2);document.getElementById('scrapedCount').textContent=(data.sources||[]).length;if(data.last_update){const d=new Date(data.last_update);document.getElementById('dailyUpdateTime').textContent='Last: '+d.toLocaleDateString('en-PK',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})}let up=0,dn=0;Object.values(data.local||{}).forEach(x=>{if(x.change>=0)up++;else dn++});Object.values(data.international||{}).forEach(x=>{if(x.change>=0)up++;else dn++});document.getElementById('marketsUp').textContent=up;document.getElementById('marketsDown').textContent=dn;document.getElementById('localGrid').innerHTML=localCommodities.map(i=>renderLocal(i,(data.local||{})[i.id]||{current:0,previous:0,change:0,change_percent:0,history:[0],high:0,low:0})).join('');document.getElementById('intlGrid').innerHTML=intlCommodities.map(i=>renderIntl(i,(data.international||{})[i.id]||{current:0,previous:0,change:0,change_percent:0,history:[0],high:0,low:0},data.usd_pkr)).join('');const now=new Date();document.getElementById('lastUpdate').textContent=now.toLocaleDateString('en-PK',{day:'numeric',month:'short',year:'numeric'})+' | '+now.toLocaleTimeString('en-PK',{hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:true});document.getElementById('footerTime').textContent=now.toLocaleDateString('en-PK',{day:'numeric',month:'short',year:'numeric'})+' '+now.toLocaleTimeString('en-PK',{hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:true});const st=backendConnected?'<i class="fas fa-check-circle" style="color:var(--neon-green)"></i> Connected to Real Data Server':'<i class="fas fa-info-circle" style="color:var(--neon-gold)"></i> Using Real Base Prices';document.getElementById('dataStatus').innerHTML=st;document.querySelectorAll('.commodity-card').forEach(c=>{c.classList.add('updating');setTimeout(()=>c.classList.remove('updating'),500)})}
+async function init(){await checkBackend();await updateUI();setTimeout(()=>document.getElementById('loadingOverlay').classList.add('hidden'),800);setInterval(async()=>{await checkBackend();await updateUI()},10000)}
+document.addEventListener('DOMContentLoaded',init);
+document.addEventListener('keydown',e=>{if(e.key==='r'||e.key==='R')updateUI()});
+</script>
+</body>
+</html>
