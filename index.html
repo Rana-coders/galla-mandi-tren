@@ -152,18 +152,67 @@ footer a:hover{text-decoration:underline}
 .city3{margin:12px 0 8px;padding:10px 12px;background:rgba(0,212,255,.04);border:1px solid rgba(0,212,255,.1);border-radius:10px}
 .city3-title{font-size:.7rem;color:var(--blue);font-family:'Orbitron',sans-serif;letter-spacing:.5px;margin-bottom:8px;display:flex;align-items:center;gap:6px;direction:rtl}
 .city3-row{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
-.city3-item{text-align:center;padding:6px 4px;background:rgba(255,255,255,.03);border-radius:8px;border:1px solid var(--border)}
-.city3-name{font-size:.72rem;color:var(--txt3);margin-bottom:3px;direction:rtl;font-family:'Rajdhani',sans-serif}
-.city3-price{font-family:'Orbitron',sans-serif;font-size:.78rem;font-weight:700;color:var(--blue)}
+.city3-item{text-align:center;padding:8px 4px;background:rgba(255,255,255,.03);border-radius:8px;border:1px solid var(--border);transition:background .2s}
+.city3-item:hover{background:rgba(255,255,255,.06)}
+.city3-name{font-size:.72rem;color:var(--txt3);margin-bottom:5px;direction:rtl;font-family:'Rajdhani',sans-serif}
+.city3-price{font-family:'Orbitron',sans-serif;font-size:.82rem;font-weight:700}
+/* PRICE BAND */
+.price-band{display:flex;align-items:center;gap:10px;padding:14px 14px;background:rgba(255,255,255,.03);border-radius:12px;margin:14px 0;border:1px solid var(--border)}
+.pb-min,.pb-max{display:flex;flex-direction:column;gap:3px;min-width:0}
+.pb-lbl{font-size:.64rem;color:var(--txt3);text-transform:uppercase;letter-spacing:.5px;direction:rtl;white-space:nowrap}
+.pb-val{font-family:'Orbitron',sans-serif;font-size:.88rem;font-weight:700;white-space:nowrap}
+.mn-col{color:var(--green)}.mx-col{color:var(--gold)}
+.pb-mid{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px}
+.pb-lbl2{font-size:.62rem;color:var(--txt3);letter-spacing:.5px;direction:rtl}
+.pb-bar{width:100%;height:5px;background:rgba(255,255,255,.08);border-radius:3px;overflow:hidden}
+.pb-fill{height:100%;width:100%;border-radius:3px;opacity:.7}
+/* MARKET NOTE */
+.mkt-note{display:flex;align-items:center;justify-content:space-between;padding:6px 10px;background:rgba(255,255,255,.02);border-radius:8px;margin-top:2px}
+.mkt-tick{font-family:'Orbitron',sans-serif;font-size:.78rem;font-weight:700}
+.mkt-tick.up{color:var(--green)}.mkt-tick.dn{color:var(--red)}
+.mkt-label{font-size:.7rem;color:var(--txt3);direction:rtl}
 /* DISCLAIMER */
-.disclaimer{margin-top:12px;padding:8px 12px;background:rgba(255,193,7,.06);border:1px solid rgba(255,193,7,.2);border-radius:8px;display:flex;align-items:flex-start;gap:8px;direction:rtl}
+.disclaimer{margin-top:10px;padding:8px 12px;background:rgba(255,193,7,.06);border:1px solid rgba(255,193,7,.2);border-radius:8px;display:flex;align-items:flex-start;gap:8px;direction:rtl}
 .disclaimer i{color:#ffc107;font-size:.85rem;margin-top:2px;flex-shrink:0}
-.disclaimer span{font-size:.75rem;color:var(--txt2);line-height:1.5;font-family:'Rajdhani',sans-serif;direction:rtl}
+.disclaimer span{font-size:.73rem;color:var(--txt2);line-height:1.5;font-family:'Rajdhani',sans-serif;direction:rtl}
 @media(max-width:768px){.header{padding:12px 16px;flex-direction:column;text-align:center}.dev{text-align:center}.main{padding:16px}.cg{grid-template-columns:1fr;gap:14px}.pm{font-size:1.6rem}.sstrip{grid-template-columns:1fr 1fr}.ib{flex-direction:column;text-align:center}.ir{text-align:center}}
 @media(max-width:480px){.brand h1{font-size:1.2rem}.sstrip{grid-template-columns:1fr}.cc{padding:16px}.pm{font-size:1.4rem}}
+/* ── SCROLL REVEAL ── */
+.reveal{opacity:0;transform:translateY(36px);transition:opacity .65s cubic-bezier(.22,1,.36,1),transform .65s cubic-bezier(.22,1,.36,1)}
+.reveal.vis{opacity:1;transform:translateY(0)}
+.reveal-s{opacity:0;transform:scale(.93);transition:opacity .5s cubic-bezier(.22,1,.36,1),transform .5s cubic-bezier(.22,1,.36,1)}
+.reveal-s.vis{opacity:1;transform:scale(1)}
+.d1{transition-delay:.04s}.d2{transition-delay:.1s}.d3{transition-delay:.16s}
+.d4{transition-delay:.22s}.d5{transition-delay:.28s}.d6{transition-delay:.34s}.d7{transition-delay:.4s}
+/* ── CURSOR GLOW ── */
+#cglow{position:fixed;width:380px;height:380px;border-radius:50%;pointer-events:none;z-index:1;
+  background:radial-gradient(circle,rgba(0,255,136,.055) 0%,transparent 65%);
+  transform:translate(-50%,-50%);transition:left .1s,top .1s;mix-blend-mode:screen;will-change:left,top}
+/* ── MAGNETIC TABS ── */
+.tab{transition:all .3s cubic-bezier(.34,1.56,.64,1)}
+.tab:hover{transform:translateY(-3px) scale(1.05)}
+/* ── CARD TILT ── */
+.cc{transform-style:preserve-3d;transition:transform .25s ease,box-shadow .25s ease}
+/* ── PRICE NUMBER FLASH ── */
+@keyframes fUp{0%,100%{color:inherit}40%{color:#00ff88;text-shadow:0 0 14px rgba(0,255,136,.8)}}
+@keyframes fDn{0%,100%{color:inherit}40%{color:#ff3366;text-shadow:0 0 14px rgba(255,51,102,.8)}}
+.fu{animation:fUp .7s ease}
+.fd{animation:fDn .7s ease}
+/* ── COUNTER FLOAT PARTICLES ── */
+@keyframes floatUp{0%{opacity:.8;transform:translateY(0) scale(1)}100%{opacity:0;transform:translateY(-60px) scale(.6)}}
+.float-price{position:fixed;pointer-events:none;font-family:'Orbitron',sans-serif;font-size:.75rem;font-weight:700;animation:floatUp 1.2s ease forwards;z-index:9998}
+/* ── SHIMMER ON LOAD ── */
+@keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+.shimmer{background:linear-gradient(90deg,transparent 25%,rgba(255,255,255,.04) 50%,transparent 75%);background-size:200% 100%;animation:shimmer 2.5s infinite}
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:linear-gradient(180deg,var(--green),var(--blue));border-radius:3px}
+#pcanvas{position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.4}
 </style>
 </head>
 <body>
+<canvas id="pcanvas"></canvas>
+<div id="cglow"></div>
 <div class="bg-grid"></div>
 <div class="bg-glow"></div>
 <div class="loading" id="loading">
@@ -506,18 +555,56 @@ const URDU_DISCLAIMER = `<div class="disclaimer" dir="rtl">
 </div>`;
 
 function rloc(m,d){
-  const up=d.ch>=0,ar=up?'fa-arrow-up':'fa-arrow-down',cl=up?'up':'dn';
-  return `<div class="cc upd"><div class="chdr"><div class="cinfo"><div class="cico"><i class="fas ${m.ico}" style="color:${m.col}"></i></div>
-    <div><div class="cname">${m.nm}</div><div class="csub">${m.ln}</div></div></div>
-    <div class="tb ${cl}"><i class="fas ${ar}"></i> ${Math.abs(d.chp).toFixed(2)}%</div></div>
-    <div class="pm"><span class="curr">PKR</span><span class="pv">${Math.round(d.cur).toLocaleString('en-PK')}</span><span class="punit">${m.unit}</span></div>
-    <div class="pch"><span class="ar ${cl}"><i class="fas ${ar}"></i></span><span class="vl ${cl}">${up?'+':''}${Math.round(d.ch)}</span><span class="ab2">PKR</span></div>
-    <div class="spkwrap">${spk(d.hist,m.col)}</div>
-    ${cityRows(m.id)}
-    <div class="sr"><div class="stat-item"><div class="sl">High</div><div class="sv">PKR ${Math.round(d.hi).toLocaleString('en-PK')}</div></div>
-    <div class="stat-item"><div class="sl">Low</div><div class="sv">PKR ${Math.round(d.lo).toLocaleString('en-PK')}</div></div></div>
-    <span class="sbadge live"><i class="fas fa-chart-line"></i> Real Apr 2026 base + Live</span>
-    ${URDU_DISCLAIMER}</div>`;
+  const cities = CITY3[m.id] || [];
+  const up=d.ch>=0, ar=up?'fa-arrow-up':'fa-arrow-down', cl=up?'up':'dn';
+  // Use city avg as the "official" displayed price — more trustworthy
+  const cityAvg = cities.length ? Math.round(cities.reduce((s,c)=>s+c.price,0)/cities.length) : Math.round(d.cur);
+  const minCity = cities.length ? Math.min(...cities.map(c=>c.price)) : cityAvg;
+  const maxCity = cities.length ? Math.max(...cities.map(c=>c.price)) : cityAvg;
+
+  return `<div class="cc upd">
+    <!-- Header -->
+    <div class="chdr">
+      <div class="cinfo">
+        <div class="cico"><i class="fas ${m.ico}" style="color:${m.col}"></i></div>
+        <div>
+          <div class="cname">${m.nm}</div>
+          <div class="csub">${m.ln} &bull; فی ۴۰ کلو</div>
+        </div>
+      </div>
+      <div class="tb ${cl}"><i class="fas ${ar}"></i> ${Math.abs(d.chp).toFixed(2)}%</div>
+    </div>
+
+    <!-- Price Range Band -->
+    <div class="price-band">
+      <div class="pb-min"><span class="pb-lbl">کم از کم</span><span class="pb-val mn-col">PKR ${minCity.toLocaleString('en-PK')}</span></div>
+      <div class="pb-mid"><span class="pb-lbl2">رینج</span><div class="pb-bar"><div class="pb-fill" style="background:${m.col}"></div></div></div>
+      <div class="pb-max"><span class="pb-lbl">زیادہ سے زیادہ</span><span class="pb-val mx-col">PKR ${maxCity.toLocaleString('en-PK')}</span></div>
+    </div>
+
+    <!-- 3 Cities -->
+    <div class="city3">
+      <div class="city3-title"><i class="fas fa-location-dot"></i> بڑے شہروں کی قیمت</div>
+      <div class="city3-row">
+        ${cities.map(c=>`<div class="city3-item">
+          <div class="city3-name">${c.city}</div>
+          <div class="city3-price" style="color:${m.col}">PKR ${c.price.toLocaleString('en-PK')}</div>
+        </div>`).join('')}
+      </div>
+    </div>
+
+    <!-- Sparkline small -->
+    <div class="spkwrap" style="height:32px;margin:10px 0 6px">${spk(d.hist,m.col)}</div>
+
+    <!-- Market movement note -->
+    <div class="mkt-note">
+      <span class="mkt-tick ${cl}"><i class="fas ${ar}"></i> ${up?'+':''}${Math.round(d.ch)} PKR</span>
+      <span class="mkt-label">مارکیٹ حرکت (آج)</span>
+    </div>
+
+    <!-- Disclaimer -->
+    ${URDU_DISCLAIMER}
+  </div>`;
 }
 
 function rintl(m,d){
@@ -613,6 +700,145 @@ async function init(){
 
 document.addEventListener('DOMContentLoaded',init);
 document.addEventListener('keydown',e=>{if(e.key==='r'||e.key==='R'){tickL();tickI();renderGrids();}});
+
+// ══════════════════════════════════════════
+//  ANIMATION SYSTEM
+// ══════════════════════════════════════════
+
+// ── 1. FLOATING PARTICLES CANVAS ──
+(function(){
+  const cv=document.getElementById('pcanvas');
+  if(!cv)return;
+  const ctx=cv.getContext('2d');
+  let W,H,pts=[];
+  const COLS=['rgba(0,255,136,','rgba(0,212,255,','rgba(255,215,0,'];
+  function resize(){W=cv.width=innerWidth;H=cv.height=innerHeight;}
+  resize();window.addEventListener('resize',resize);
+  function mkPt(){
+    return{x:Math.random()*W,y:Math.random()*H,r:Math.random()*1.8+.4,
+      vx:(Math.random()-.5)*.35,vy:(Math.random()-.5)*.35,
+      col:COLS[Math.floor(Math.random()*COLS.length)],
+      o:Math.random()*.5+.1,pulse:Math.random()*Math.PI*2}
+  }
+  for(let i=0;i<90;i++)pts.push(mkPt());
+  let frame=0;
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    frame++;
+    pts.forEach(p=>{
+      p.x+=p.vx;p.y+=p.vy;p.pulse+=.012;
+      if(p.x<0)p.x=W;if(p.x>W)p.x=0;
+      if(p.y<0)p.y=H;if(p.y>H)p.y=0;
+      const op=p.o*(0.6+0.4*Math.sin(p.pulse));
+      ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      ctx.fillStyle=p.col+op+')';ctx.fill();
+    });
+    // Draw faint connection lines between close particles
+    for(let i=0;i<pts.length;i++){
+      for(let j=i+1;j<pts.length;j++){
+        const dx=pts[i].x-pts[j].x,dy=pts[i].y-pts[j].y;
+        const dist=Math.sqrt(dx*dx+dy*dy);
+        if(dist<100){
+          ctx.beginPath();
+          ctx.moveTo(pts[i].x,pts[i].y);ctx.lineTo(pts[j].x,pts[j].y);
+          ctx.strokeStyle='rgba(0,212,255,'+(0.06*(1-dist/100))+')';
+          ctx.lineWidth=.6;ctx.stroke();
+        }
+      }
+    }
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+// ── 2. CURSOR GLOW ──
+(function(){
+  const glow=document.getElementById('cglow');
+  if(!glow)return;
+  let mx=window.innerWidth/2,my=window.innerHeight/2;
+  let cx=mx,cy=my;
+  document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
+  function animate(){
+    cx+=(mx-cx)*.12;cy+=(my-cy)*.12;
+    glow.style.left=cx+'px';glow.style.top=cy+'px';
+    requestAnimationFrame(animate);
+  }
+  animate();
+  // Hide on mobile
+  if('ontouchstart' in window)glow.style.display='none';
+})();
+
+// ── 3. SCROLL REVEAL ──
+(function(){
+  const io=new IntersectionObserver(entries=>{
+    entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('vis')});
+  },{threshold:.1});
+  function attachReveal(){
+    document.querySelectorAll('.sc,.cc,.ib,.sh,.sstrip,.tabs,.ctsec').forEach((el,i)=>{
+      if(!el.classList.contains('reveal')&&!el.classList.contains('reveal-s')){
+        el.classList.add(i%3===0?'reveal-s':'reveal');
+        el.classList.add('d'+(Math.min(i%7+1,7)));
+        io.observe(el);
+      }
+    });
+  }
+  attachReveal();
+  // Re-attach after grid renders
+  const orig=window.renderGrids;
+  window._revealTimer=null;
+  const hook=()=>{clearTimeout(window._revealTimer);window._revealTimer=setTimeout(attachReveal,100);};
+  document.getElementById('localGrid')?.addEventListener('DOMSubtreeModified',hook);
+  document.getElementById('intlGrid')?.addEventListener('DOMSubtreeModified',hook);
+  setInterval(attachReveal,3000);
+})();
+
+// ── 4. CARD 3D TILT on mouse hover ──
+(function(){
+  document.addEventListener('mousemove',e=>{
+    document.querySelectorAll('.cc').forEach(card=>{
+      const rect=card.getBoundingClientRect();
+      const cx=rect.left+rect.width/2,cy=rect.top+rect.height/2;
+      const dx=e.clientX-cx,dy=e.clientY-cy;
+      const dist=Math.sqrt(dx*dx+dy*dy);
+      if(dist<260){
+        const rx=(dy/rect.height)*10;
+        const ry=-(dx/rect.width)*10;
+        card.style.transform=`perspective(800px) rotateX(${rx}deg) rotateY(${ry}deg) translateY(-6px)`;
+        card.style.boxShadow=`0 20px 40px rgba(0,0,0,.6),0 0 30px rgba(0,255,136,.1)`;
+      } else {
+        card.style.transform='';
+        card.style.boxShadow='';
+      }
+    });
+  });
+  document.addEventListener('mouseleave',()=>{
+    document.querySelectorAll('.cc').forEach(c=>{c.style.transform='';c.style.boxShadow='';});
+  });
+})();
+
+// ── 5. PRICE CHANGE FLOAT EFFECT ──
+function spawnFloat(x,y,text,up){
+  const el=document.createElement('div');
+  el.className='float-price';
+  el.style.cssText=`left:${x}px;top:${y}px;color:${up?'#00ff88':'#ff3366'}`;
+  el.textContent=(up?'+':'')+text+' PKR';
+  document.body.appendChild(el);
+  setTimeout(()=>el.remove(),1200);
+}
+
+// ── 6. SCROLL PROGRESS BAR ──
+(function(){
+  const bar=document.createElement('div');
+  bar.style.cssText='position:fixed;top:0;left:0;height:2px;width:0%;background:linear-gradient(90deg,#00ff88,#00d4ff);z-index:9999;transition:width .1s;box-shadow:0 0 8px #00ff88';
+  document.body.appendChild(bar);
+  window.addEventListener('scroll',()=>{
+    const pct=(scrollY/(document.body.scrollHeight-innerHeight))*100;
+    bar.style.width=pct+'%';
+  });
+})();
+
+// ── 7. SHIMMER on summary cards ──
+document.querySelectorAll('.sc').forEach(c=>c.classList.add('shimmer'));
 </script>
 </body>
 </html>
